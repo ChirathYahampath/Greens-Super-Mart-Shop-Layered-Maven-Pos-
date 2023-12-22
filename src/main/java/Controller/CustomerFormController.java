@@ -1,5 +1,6 @@
 package Controller;
 
+import DAO.CustomerModel;
 import com.jfoenix.controls.JFXTextField;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,7 +16,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import dto.CustomerDTO;
 import dto.tm.CustomerTm;
-import model.impl.CustomerModelImpl;
+import DAO.impl.CustomerModelImpl;
 
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -59,7 +60,7 @@ public class CustomerFormController {
     private TableColumn CollOption;
 
 
-    private CustomerModel CustomerModel = new CustomerModelImpl();
+    private DAO.CustomerModel CustomerModel = new CustomerModelImpl();
     @FXML
     void SaveButtonOnAction(ActionEvent event) {
 
