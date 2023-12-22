@@ -1,121 +1,119 @@
 package Controller;
 
-import DAO.CustomerModel;
+import BO.BoFactory;
+import BO.Custom.CustomerBo;
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.JFXTreeTableView;
+import com.jfoenix.controls.RecursiveTreeItem;
+import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import dto.CustomerDTO;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import dto.CustomerDTO;
 import dto.tm.CustomerTm;
-import DAO.impl.CustomerModelImpl;
 
-import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.sql.*;
+import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
-public class CustomerFormController {
-
+public class CustomerFormController implements Initializable {
+    public Label lblCustId;
+    @FXML
+    private TreeTableColumn colAddress;
 
     @FXML
-    private AnchorPane Root;
+    private TreeTableColumn colCustId;
 
     @FXML
-    private JFXTextField txtId;
+    private TreeTableColumn colCustName;
 
     @FXML
-    private JFXTextField txtName;
+    private TreeTableColumn colSalary;
+
+    @FXML
+    private TreeTableColumn colOption;
+
+    @FXML
+    private AnchorPane customerPane;
+
+    @FXML
+    private JFXTreeTableView<CustomerTm> tblCustomer;
 
     @FXML
     private JFXTextField txtAddress;
 
     @FXML
-    private JFXTextField txtSallery;
+    private JFXTextField txtName;
 
     @FXML
-    private TableView<CustomerTm> CustomerTable;
+    private JFXTextField txtSalary;
 
     @FXML
-    private TableColumn collID;
-
-    @FXML
-    private TableColumn CollName;
-
-    @FXML
-    private TableColumn CollAdreds;
-
-    @FXML
-    private TableColumn CollSallery;
-
-    @FXML
-    private TableColumn CollOption;
+    private JFXTextField txtSearch;
 
 
-    private DAO.CustomerModel CustomerModel = new CustomerModelImpl();
-    @FXML
-    void SaveButtonOnAction(ActionEvent event) {
+    CustomerBo customerBo = BoFactory.getInstance().getBoType(BoFactory.BoType.CUSTOMER);
 
-
-    }
-
-    public void initialize(){
-        collID.setCellValueFactory(new PropertyValueFactory<>("id"));
-       CollName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        CollAdreds.setCellValueFactory(new PropertyValueFactory<>("address"));
-        CollSallery.setCellValueFactory(new PropertyValueFactory<>("salary"));
-        CollOption.setCellValueFactory(new PropertyValueFactory<>("btn"));
-        loadCustomerTable();
-
-        CustomerTable.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) -> {
-            SetData(newValue);
-        });
-
-    }
-
-    private void SetData(CustomerTm newValue) {
-        if (newValue != null) {
-            txtId.setEditable(false);
-            txtId.setText(newValue.getId());
-            txtName.setText(newValue.getName());
-            txtAddress.setText(newValue.getAddress());
-            txtSallery.setText(String.valueOf(newValue.getSalary()));
-        }
-    }
-
-    private void loadCustomerTable() {
-        ObservableList<CustomerTm> tmList = FXCollections.observableArrayList();
-
+    public void backButtonOnAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) customerPane.getScene().getWindow();
         try {
-            List<CustomerDTO> dtoList = CustomerModel.allCustomers();
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/DashBoard.fxml"))));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        stage.show();
+    }
 
-            for (CustomerDTO dto:dtoList) {
-                Button btn = new Button("Delete");
 
-                CustomerTm c = new CustomerTm(
-                        dto.getId(),
-                        dto.getName(),
-                        dto.getAddress(),
-                        dto.getSalary(),
-                        btn
-                );
+    @FXML
+    void clearButtonOnAction(ActionEvent event) {
+        clearFields();
+    }
 
-                btn.setOnAction(actionEvent -> {
-                    deleteCustomer(c.getId());
-                });
+    private void clearFields() {
+        generateId();
+        txtName.clear();
+        txtAddress.clear();
+        txtSalary.clear();
+        txtSearch.clear();
+        tblCustomer.refresh();
+    }
 
-                tmList.add(c);
+    @FXML
+    void saveButtonOnAction(ActionEvent event) {
+        CustomerDTO customer = new CustomerDTO(
+                lblCustId.getText(),
+                txtName.getText(),
+                txtAddress.getText(),
+                Double.parseDouble(txtSalary.getText())
+        );
+        try {
+            boolean isSaved = customerBo.saveCustomer(customer);
+
+            if (isSaved) {
+                new Alert(Alert.AlertType.INFORMATION,"Customer Saved..!").show();
+                loadTable();
+                clearFields();
+            }else{
+                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
             }
-
-            CustomerTable.setItems(tmList);
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -123,93 +121,130 @@ public class CustomerFormController {
         }
     }
 
-    private void deleteCustomer(String id) {
-
-
+    @FXML
+    void updateButtonOnAction(ActionEvent event) {
+        CustomerDTO customer = new CustomerDTO(
+                lblCustId.getText(),
+                txtName.getText(),
+                txtAddress.getText(),
+                Double.parseDouble(txtSalary.getText())
+        );
         try {
-            boolean isDeleted = CustomerModel.deleteCustomer(id);
 
-            if (isDeleted){
-                new Alert(Alert.AlertType.INFORMATION,"Customer Deleted!").show();
-                loadCustomerTable();
+            boolean isUpdate = customerBo.updateCustomer(customer);
+
+            if (isUpdate){
+                new Alert(Alert.AlertType.INFORMATION,"Customer Updated..!").show();
+                clearFields();
+                loadTable();
             }else{
-                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
+                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
             }
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    @FXML
-    void UpdateButtonOnAction(ActionEvent event) {
 
     }
 
-    @FXML
-    public void ReloadButtnOnAction(javafx.event.ActionEvent actionEvent) {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        colCustId.setCellValueFactory(new TreeItemPropertyValueFactory<>("id"));
+        colCustName.setCellValueFactory(new TreeItemPropertyValueFactory<>("name"));
+        colAddress.setCellValueFactory(new TreeItemPropertyValueFactory<>("address"));
+        colSalary.setCellValueFactory(new TreeItemPropertyValueFactory<>("salary"));
+        colOption.setCellValueFactory(new TreeItemPropertyValueFactory<>("btn"));
+        generateId();
+        loadTable();
 
-            loadCustomerTable();
-            CustomerTable.refresh();
-             clearFields();
-        }
+        tblCustomer.getSelectionModel().selectedItemProperty().addListener((observableValue, oldValue, newValue) ->{
+            if (newValue!=null){
+                setData(newValue);
+            }
+        });
 
-    private void clearFields() {
-        CustomerTable.refresh();
-        txtSallery.clear();
-        txtAddress.clear();
-        txtName.clear();
-        txtId.clear();
-        txtId.setEditable(true);
+        txtSearch.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                tblCustomer.setPredicate(new Predicate<TreeItem<CustomerTm>>() {
+                    @Override
+                    public boolean test(TreeItem<CustomerTm> customerTmTreeItem) {
+                        boolean flag = customerTmTreeItem.getValue().getId().contains(newValue) ||
+                                customerTmTreeItem.getValue().getName().contains(newValue);
+                        return flag;
+                    }
+                });
+            }
+        });
     }
 
-    public void SaveButtonOnAction(javafx.event.ActionEvent actionEvent) {
+    private void setData(TreeItem<CustomerTm> value) {
+        lblCustId.setText(value.getValue().getId());
+        txtName.setText(value.getValue().getName());
+        txtAddress.setText(value.getValue().getAddress());
+        txtSalary.setText(String.valueOf(value.getValue().getSalary()));
+    }
 
+    private void loadTable() {
+        ObservableList<CustomerTm> tmList = FXCollections.observableArrayList();
         try {
-            boolean isSaved = CustomerModel.saveCustomer(new CustomerDTO(txtId.getText(),
-                    txtName.getText(),
-                    txtAddress.getText(),
-                    Double.parseDouble(txtSallery.getText())
-            ));
-            if (isSaved){
-                new Alert(Alert.AlertType.INFORMATION,"Customer Saved!").show();
-                loadCustomerTable();
-                clearFields();
+            List<CustomerDTO> list = customerBo.findAllCustomers();
+
+            for (CustomerDTO customer:list) {
+                JFXButton btn = new JFXButton("Delete");
+                btn.setBackground(Background.fill(Color.rgb(227,92,92)));
+                btn.setTextFill(Color.rgb(255,255,255));
+                btn.setStyle("-fx-font-weight: BOLD");
+
+                btn.setOnAction(actionEvent -> {
+                    try {
+                        Optional<ButtonType> buttonType = new Alert(Alert.AlertType.CONFIRMATION, "Do you want to delete " + customer.getId() + " customer ? ", ButtonType.YES, ButtonType.NO).showAndWait();
+                        if (buttonType.get() == ButtonType.YES){
+
+                            boolean isDelete = customerBo.deleteCustomer(customer.getId());
+
+                            if (isDelete){
+                                new Alert(Alert.AlertType.INFORMATION,"Customer Deleted..!").show();
+                                loadTable();
+                                generateId();
+                            }else{
+                                new Alert(Alert.AlertType.ERROR,"Something went wrong..!").show();
+                            }
+                        }
+                    } catch (SQLException | ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+                tmList.add(new CustomerTm(
+                        customer.getId(),
+                        customer.getName(),
+                        customer.getAddress(),
+                        customer.getSalary(),
+                        btn
+                ));
             }
 
-        } catch (SQLIntegrityConstraintViolationException ex){
-            new Alert(Alert.AlertType.ERROR,"Duplicate Entry").show();
-        } catch (ClassNotFoundException | SQLException e) {
+            TreeItem<CustomerTm> treeItem = new RecursiveTreeItem<>(tmList, RecursiveTreeObject::getChildren);
+            tblCustomer.setRoot(treeItem);
+            tblCustomer.setShowRoot(false);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public void UpdateButtonOnAction(javafx.event.ActionEvent actionEvent) {
+    private void generateId() {
         try {
-            boolean isUpdated = CustomerModel.updateCustomer(new CustomerDTO(txtId.getText(),
-                    txtName.getText(),
-                    txtAddress.getText(),
-                    Double.parseDouble(txtSallery.getText())
-            ));
-            if (isUpdated){
-                new Alert(Alert.AlertType.INFORMATION,"Customer Updated!").show();
-                loadCustomerTable();
-                clearFields();
-            }
-        } catch (ClassNotFoundException | SQLException e) {
+            lblCustId.setText(customerBo.generateId());
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
-
-    public void BackButtonOnAction(javafx.event.ActionEvent actionEvent) {
-            Stage stage = (Stage) CustomerTable.getScene().getWindow();
-            try {
-                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/DashBoardForm.fxml"))));
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 }
-
-

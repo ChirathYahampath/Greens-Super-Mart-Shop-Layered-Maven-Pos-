@@ -86,7 +86,7 @@ public class Itemformcontroller {
                     @Override
                     public boolean test(TreeItem<ItemTm> treeItem) {
                         return treeItem.getValue().getCode().contains(newValue) ||
-                                treeItem.getValue().getDesc().contains(newValue);
+                                treeItem.getValue().getDescription().contains(newValue);
                     }
                 });
             }
