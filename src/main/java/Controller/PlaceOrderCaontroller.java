@@ -107,7 +107,7 @@ public class PlaceOrderFormController {
         loadItemCodes();
 
         cmbCustId.getSelectionModel().selectedItemProperty().addListener((observableValue, o, newValue) -> {
-            for (CustomerDto dto:customers) {
+            for (CustomerDTO:Customer) {
                 if (dto.getId().equals(newValue.toString())){
                     txtCustName.setText(dto.getName());
                 }
