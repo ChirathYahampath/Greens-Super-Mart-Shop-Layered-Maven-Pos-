@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class OrderDetailsDTO {
+public class OrderDetailDTO {
     private String orderId;
     private String itemCode;
     private int qty;

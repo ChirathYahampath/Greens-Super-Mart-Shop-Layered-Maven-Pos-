@@ -8,7 +8,6 @@ import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import db.DBConnection;
 import dto.CustomerDTO;
 import dto.itemDTO;
-import dto.tm.CustomerTm;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -26,7 +25,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.function.Predicate;
 
-public class Itemformcontroller {
+public class ItemFormController {
 
     @FXML
     private JFXTextField TxtCode;

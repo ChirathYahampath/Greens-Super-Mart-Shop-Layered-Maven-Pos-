@@ -2,14 +2,14 @@ package BO.Custom;
 
 import dto.CustomerDTO;
 import dto.OrderDTO;
-import dto.OrderDetailsDTO;
+import dto.OrderDetailDTO;
 import dto.itemDTO;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public interface OrderDeatilsBo {
-    List<OrderDetailsDTO> findOrderDetailByOrderId(String id) throws SQLException, ClassNotFoundException;
+    List<OrderDetailDTO> findOrderDetailByOrderId(String id) throws SQLException, ClassNotFoundException;
 
     itemDTO findItem(String itemCode) throws SQLException, ClassNotFoundException;
 

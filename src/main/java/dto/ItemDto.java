@@ -6,7 +6,7 @@ import lombok.*;
     @ToString
     @Getter
     @Setter
-    public class itemDTO {
+    public class CustomerDto {
         private String code;
         private String desc;
         private double unitPrice;

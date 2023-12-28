@@ -2,7 +2,6 @@ package dao.util;
 
 import entity.Customer;
 import entity.Item;
-import entity.OrderDetail;
 import entity.Orders;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;

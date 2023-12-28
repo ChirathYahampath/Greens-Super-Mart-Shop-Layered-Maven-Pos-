@@ -1,6 +1,5 @@
 package dao;
 
-import dao.custom.impl.CustomerDaoImpl;
 import dao.util.DaoType;
 
 public class DaoFactory {
