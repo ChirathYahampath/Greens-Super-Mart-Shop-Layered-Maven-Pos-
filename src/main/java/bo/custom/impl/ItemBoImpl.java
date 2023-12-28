@@ -1,6 +1,6 @@
-package BO.Custom.impl;
+package bo.custom.impl;
 
-import BO.Custom.ItemBo;
+import bo.custom.ItemBo;
 import dao.DaoFactory;
 import dao.custom.ItemDAO;
 import dto.itemDTO;

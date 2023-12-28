@@ -1,6 +1,6 @@
-package BO.Custom;
+package bo.custom;
 
-import BO.SuperBo;
+import bo.SuperBo;
 import dto.itemDTO;
 
 import java.sql.SQLException;

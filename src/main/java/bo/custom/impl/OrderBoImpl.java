@@ -8,7 +8,7 @@ import dto.OrderDto;
 import java.sql.SQLException;
 
 public class OrderBoImpl implements OrderBo {
-    private OrderDao orderDao = new OrderDaoImpl();
+    private OrderDao orderDao = (OrderDao) new OrderDaoImpl();
 
     @Override
     public boolean saveOrder(OrderDto dto) throws SQLException, ClassNotFoundException {

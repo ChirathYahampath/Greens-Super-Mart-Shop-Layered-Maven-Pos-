@@ -1,6 +1,6 @@
-package BO.Custom.impl;
+package bo.custom.impl;
 
-import BO.Custom.OrderDeatilsBo;
+import bo.custom.OrderDeatilsBo;
 import DAO.DaoFactory;
 import DAO.Custom.CustomerDAO;
 import DAO.Custom.ItemDAO;
@@ -9,7 +9,7 @@ import DAO.Custom.OrderDetailsDAO;
 import dto.CustomerDTO;
 import dto.OrderDTO;
 import dto.itemDTO;
-import dto.OrderDetailDTO;
+import dto.OrderDetailDto;
 import entity.Customer;
 import entity.Item;
 import entity.Orders;
@@ -26,10 +26,10 @@ public class OrderDetailsBoImpl implements OrderDeatilsBo {
     CustomerDAO customerDao = DaoFactory.getDaoFactory().getDaoType(DaoFactory.DaoType.CUSTOMER);
 
     @Override
-    public List<OrderDetailDTO> findOrderDetailByOrderId(String id) throws SQLException, ClassNotFoundException {
-        List<OrderDetailDTO> list = new ArrayList<>();
+    public List<OrderDetailDto> findOrderDetailByOrderId(String id) throws SQLException, ClassNotFoundException {
+        List<OrderDetailDto> list = new ArrayList<>();
         for (OrderDetails detail:orderDetailsDao.findOrderDetailByOrderId(id)) {
-            list.add(new OrderDetailDTO(
+            list.add(new OrderDetailDto(
                     detail.getOrderId(),
                     detail.getItemCode(),
                     detail.getQty(),
@@ -53,11 +53,11 @@ public class OrderDetailsBoImpl implements OrderDeatilsBo {
     @Override
     public List<OrderDTO> findAllOrders() throws SQLException, ClassNotFoundException {
         List<OrderDTO> list = new ArrayList<>();
-        List<OrderDetailDTO> details = new ArrayList<>();
+        List<OrderDetailDto> details = new ArrayList<>();
 
         for (Orders order:orderDao.findAll()) {
             for (OrderDetails orderDetail:orderDetailsDao.findOrderDetailByOrderId(order.getId())) {
-                details.add(new OrderDetailDTO(
+                details.add(new OrderDetailDto(
                         orderDetail.getOrderId(),
                         orderDetail.getItemCode(),
                         orderDetail.getQty(),

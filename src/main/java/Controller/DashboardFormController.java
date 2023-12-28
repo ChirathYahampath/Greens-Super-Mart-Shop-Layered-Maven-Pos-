@@ -1,51 +1,56 @@
 package Controller;
 
-
-import com.jfoenix.controls.JFXButton;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-
+import javafx.util.Duration;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-public class DashboardFormController implements Initializable {
+public class DashboardFormController {
+    public AnchorPane pane;
+    public Label lblTime;
 
-    public JFXButton CustomerBtn;
-    public AnchorPane Pane;
+    public void initialize(){
+        calculateTime();
+    }
 
-    @FXML
-    public void CustomerButtonOnAction(ActionEvent actionEvent) {
-        Stage stage= (Stage) Pane.getScene().getWindow();
+    private void calculateTime() {
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.ZERO,
+                actionEvent -> lblTime.setText(LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss")))
+        ),
+                new KeyFrame(Duration.seconds(1)));
+        timeline.setCycleCount(Animation.INDEFINITE);
+        timeline.play();
+    }
+
+    public void customerButtonOnAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) pane.getScene().getWindow();
         try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/View/CustomerForm.fxml"))));
-
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/CustomerForm.fxml"))));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.show();
     }
 
-    @FXML
-    void itemButtonOnAction(ActionEvent event) {
-        Stage stage = (Stage) Pane.getScene().getWindow();
+    public void itemsButtonOnAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) pane.getScene().getWindow();
         try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("../view/itemForm.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/ItemForm.fxml"))));
+            stage.show();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        stage.show();
-    }
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
     }
 
     public void placeOrderButtonOnAction(ActionEvent actionEvent) {
