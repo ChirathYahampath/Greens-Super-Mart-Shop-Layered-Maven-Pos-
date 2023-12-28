@@ -1,55 +1,39 @@
-package DAO.Custom.impl;
+package dao.custom.impl;
 
-import DAO.Custom.ItemDAO;
-import entity.Item;
-import util.CrudUtil;
+import db.DBConnection;
+import dto.CustomerDto;
+import dto.ItemDto;
+import dao.custom.ItemDao;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ItemDaoImpl implements ItemDAO {
+public class ItemDaoImpl implements ItemDao {
     @Override
-    public boolean save(Item entity) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "INSERT INTO item VALUES(?,?,?,?)",
-                entity.getCode(),
-                entity.getDescription(),
-                entity.getUnitPrice(),
-                entity.getQtyOnHand()
-        );
+    public boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException {
+        return false;
     }
 
     @Override
-    public boolean update(Item entity) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "UPDATE item SET description=? , unitPrice=?, qtyOnHand=? WHERE code=?",
-                entity.getDescription(),
-                entity.getUnitPrice(),
-                entity.getQtyOnHand(),
-                entity.getCode()
-        );
+    public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
+        return false;
     }
 
     @Override
-    public boolean delete(String code) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "DELETE FROM item WHERE code=?",
-                code
-        );
+    public boolean deleteItem(ItemDto id) throws SQLException, ClassNotFoundException {
+        return false;
     }
 
     @Override
-    public List<Item> findAll() throws SQLException, ClassNotFoundException {
-        List<Item> list = new ArrayList<>();
-
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT * FROM item"
-        );
-
-        while (resultSet.next()) {
-            list.add(new Item(
+    public List<ItemDto> allItems() throws SQLException, ClassNotFoundException {
+        List<ItemDto> list = new ArrayList<>();
+        PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement("SELECT * FROM item");
+        ResultSet resultSet = pstm.executeQuery();
+        while (resultSet.next()){
+            list.add(new ItemDto(
                     resultSet.getString(1),
                     resultSet.getString(2),
                     resultSet.getDouble(3),
@@ -60,26 +44,7 @@ public class ItemDaoImpl implements ItemDAO {
     }
 
     @Override
-    public String findLastId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT code FROM item ORDER BY code DESC LIMIT 1"
-        );
-
-        return resultSet.next()? resultSet.getString(1):null;
+    public CustomerDto searchItem(String id) {
+        return null;
     }
-
-    @Override
-    public Item find(String code) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT * FROM item WHERE code=?",
-                code
-        );
-        return resultSet.next()? new Item(
-                resultSet.getString(1),
-                resultSet.getString(2),
-                resultSet.getDouble(3),
-                resultSet.getInt(4)
-        ):null;
-    }
-
 }

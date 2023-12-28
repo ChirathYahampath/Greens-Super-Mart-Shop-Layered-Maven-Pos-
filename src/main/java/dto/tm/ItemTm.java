@@ -11,9 +11,9 @@ import lombok.*;
 @ToString
 public class ItemTm extends RecursiveTreeObject<ItemTm> {
     private String code;
-    private String description;
+    private String desc;
     private double unitPrice;
-    private int qtyOnHand;
+    private int qty;
     private JFXButton btn;
 
 }

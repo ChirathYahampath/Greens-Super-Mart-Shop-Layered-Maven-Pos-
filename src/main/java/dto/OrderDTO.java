@@ -9,9 +9,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class OrderDTO {
+public class OrderDto {
     private String orderId;
     private String date;
     private String custId;
-    private List<OrderDetailsDTO> details;
+    private List<OrderDetailDto> list;
 }

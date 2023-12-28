@@ -1,7 +1,10 @@
-package DAO.Custom;
+package dao.custom;
 
-import DAO.CrudDao;
-import entity.Orders;
+import dto.OrderDetailDto;
 
-public interface OrderDAO extends CrudDao<Orders,String> {
+import java.sql.SQLException;
+import java.util.List;
+
+public interface OrderDetailDao {
+    boolean saveOrderDetails(List<OrderDetailDto> list) throws SQLException, ClassNotFoundException;
 }

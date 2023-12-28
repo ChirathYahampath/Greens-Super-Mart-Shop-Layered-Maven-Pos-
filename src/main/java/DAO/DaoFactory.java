@@ -1,9 +1,7 @@
-package DAO;
+package dao;
 
-import DAO.Custom.impl.CustomerDaoImpl;
-import DAO.Custom.impl.ItemDaoImpl;
-import DAO.Custom.impl.OrderDaoImpl;
-import DAO.Custom.impl.OrderDetailsDaoImpl;
+import dao.custom.impl.CustomerDaoImpl;
+import dao.util.DaoType;
 
 public class DaoFactory {
     private static DaoFactory daoFactory;
@@ -11,22 +9,14 @@ public class DaoFactory {
     private DaoFactory(){
 
     }
-
-    public static DaoFactory getDaoFactory(){
+    public static DaoFactory getInstance(){
         return daoFactory!=null? daoFactory:(daoFactory=new DaoFactory());
     }
 
-    public enum DaoType{
-        CUSTOMER,ITEM,ORDERS,ORDER_DETAILS
-    }
-
-    public <T extends SuperDAO>T getDaoType(DaoType type){
+    public <T extends SuperDao>T getDao(DaoType type){
         switch (type){
-            case CUSTOMER: return (T) new CustomerDaoImpl();
-            case ITEM: return (T) new ItemDaoImpl();
-            case ORDERS: return (T) new OrderDaoImpl();
-            case ORDER_DETAILS: return (T) new OrderDetailsDaoImpl();
-            default:return null;
+            case CUSTOMER: return(T) new CustomerDaoImpl();
         }
+        return null;
     }
 }

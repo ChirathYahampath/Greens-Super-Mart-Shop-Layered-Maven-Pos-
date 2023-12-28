@@ -56,19 +56,17 @@ public class CustomerBOImpl implements CustomerBo {
     }
 
     @Override
-    public String generateId() throws SQLException, ClassNotFoundException {
-        String id = customerDao.findLastId();
-
-        if (id!=null){
-            int num = Integer.parseInt(id.split("[C]")[1]);
-            num++;
-            return String.format("C%03d",num);
-        }
-        return "C001";
-    }
-
-    @Override
     public List<CustomerDTO> allCustomers() throws SQLException, ClassNotFoundException {
-        return null;
+        List<Customer> entityList = customerDao.getAll();
+        List<CustomerDTO> list = new ArrayList<>();
+        for (Customer customer:entityList) {
+            list.add(new CustomerDTO(
+                    customer.getId(),
+                    customer.getName(),
+                    customer.getAddress(),
+                    customer.getSalary()
+            ));
+        }
+        return list;
     }
 }

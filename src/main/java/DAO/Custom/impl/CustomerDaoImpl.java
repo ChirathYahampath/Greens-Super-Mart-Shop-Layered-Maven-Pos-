@@ -1,90 +1,88 @@
-package DAO.Custom.impl;
+package dao.custom.impl;
 
-import DAO.Custom.CustomerDAO;
-import dto.CustomerDTO;
+import dao.util.CrudUtil;
+import dao.util.HibernateUtil;
+import dto.CustomerDto;
+import dao.custom.CustomerDao;
 import entity.Customer;
-import util.CrudUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CustomerDaoImpl implements CustomerDAO {
+public class CustomerDaoImpl implements CustomerDao {
+
+
+    @Override
+    public CustomerDto searchCustomer(String id) {
+        return null;
+    }
+
     @Override
     public boolean save(Customer entity) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "INSERT INTO customer VALUES(?,?,?,?)",
-                entity.getId(),
-                entity.getName(),
-                entity.getAddress(),
-                entity.getSalary()
-        );
+        Session session = HibernateUtil.getSession();
+        Transaction transaction = session.beginTransaction();
+        session.save(entity);
+        transaction.commit();
+        session.close();
+        return true;
+//        String sql = "INSERT INTO customer VALUES(?,?,?,?)";
+//        return CrudUtil.execute(sql,entity.getId(),entity.getName(),entity.getAddress(),entity.getSalary());
     }
 
     @Override
     public boolean update(Customer entity) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "UPDATE customer SET name=? , address=?, salary=? WHERE id=?",
-                entity.getName(),
-                entity.getAddress(),
-                entity.getSalary(),
-                entity.getId()
-        );
+
+        Session session = HibernateUtil.getSession();
+
+        Transaction transaction = session.beginTransaction();
+        Customer customer = session.find(Customer.class, entity.getId());
+        customer.setName(entity.getName());
+        customer.setAddress(entity.getAddress());
+        customer.setSalary(entity.getSalary());
+        session.save(customer);
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
-    public boolean delete(String id) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "DELETE FROM customer WHERE id=?",
-                id
-        );
+    public boolean delete(String value) throws SQLException, ClassNotFoundException {
+
+        Session session = HibernateUtil.getSession();
+        Transaction transaction = session.beginTransaction();
+        session.delete(session.find(Customer.class,value));
+        transaction.commit();
+        session.close();
+        return true;
     }
 
     @Override
-    public List<Customer> findAll() throws SQLException, ClassNotFoundException {
-        ArrayList<Customer> list = new ArrayList<>();
+    public List<Customer> getAll() throws SQLException, ClassNotFoundException {
+        Session session = HibernateUtil.getSession();
+        Query query = session.createQuery("FROM Customer");
+        List<Customer> list = query.list();
 
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT * FROM customer"
-        );
-
-        while (resultSet.next()) {
+        /*List<Customer> list = new ArrayList<>();
+        String sql = "SELECT * FROM customer";
+//
+//        PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
+        ResultSet resultSet = CrudUtil.execute(sql);
+        while (resultSet.next()){
             list.add(new Customer(
                     resultSet.getString(1),
                     resultSet.getString(2),
                     resultSet.getString(3),
                     resultSet.getDouble(4)
             ));
-        }
-
+        }*/
+        session.close();
         return list;
-    }
-
-    @Override
-    public String findLastId() throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT id FROM customer ORDER BY id DESC LIMIT 1"
-        );
-        return resultSet.next()? resultSet.getString(1):null;
-    }
-
-    @Override
-    public Customer find(String id) throws SQLException, ClassNotFoundException {
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT * FROM customer WHERE id=?",
-                id
-        );
-        return resultSet.next()? new Customer(
-                resultSet.getString(1),
-                resultSet.getString(2),
-                resultSet.getString(3),
-                resultSet.getDouble(4)
-        ):null;
-    }
-
-    @Override
-    public boolean saveCustomer(CustomerDTO dto) throws SQLException, ClassNotFoundException {
-        return false;
     }
 }

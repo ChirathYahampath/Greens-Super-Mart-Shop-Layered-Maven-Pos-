@@ -1,69 +1,28 @@
-package DAO.Custom.impl;
+package dao.custom.impl;
 
-import DAO.Custom.OrderDetailsDAO;
-import entity.OrderDetails;
-import util.CrudUtil;
+import db.DBConnection;
+import dto.OrderDetailDto;
+import dao.custom.OrderDetailDao;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-public class OrderDetailsDaoImpl implements OrderDetailsDAO {
+public class OrderDetailDaoImpl implements OrderDetailDao {
     @Override
-    public boolean save(OrderDetails entity) throws SQLException, ClassNotFoundException {
-        return CrudUtil.execute(
-                "INSERT INTO orderdetail VALUES(?,?,?,?)",
-                entity.getOrderId(),
-                entity.getItemCode(),
-                entity.getQty(),
-                entity.getUnitPrice()
-        );
-    }
+    public boolean saveOrderDetails(List<OrderDetailDto> list) throws SQLException, ClassNotFoundException {
+        String sql = "INSERT INTO orderdetail VALUES(?,?,?,?)";
+        PreparedStatement pstm = DBConnection.getInstance().getConnection().prepareStatement(sql);
 
-    @Override
-    public boolean update(OrderDetails entity) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public boolean delete(String s) throws SQLException, ClassNotFoundException {
-        return false;
-    }
-
-    @Override
-    public List<OrderDetails> findAll() throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public String findLastId() throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public OrderDetails find(String s) throws SQLException, ClassNotFoundException {
-        return null;
-    }
-
-    @Override
-    public List<OrderDetails> findOrderDetailByOrderId(String id) throws SQLException, ClassNotFoundException {
-        List<OrderDetails> list = new ArrayList<>();
-
-        ResultSet resultSet = CrudUtil.execute(
-                "SELECT * FROM orderdetail WHERE orderId=?",
-                id
-        );
-
-        while (resultSet.next()) {
-
-            list.add(new OrderDetails(
-                    resultSet.getString(1),
-                    resultSet.getString(2),
-                    resultSet.getInt(3),
-                    resultSet.getDouble(4)
-            ));
+        for (OrderDetailDto dto:list) {
+            pstm.setString(1,dto.getOrderId());
+            pstm.setString(2,dto.getItemCode());
+            pstm.setInt(3,dto.getQty());
+            pstm.setDouble(4,dto.getUnitPrice());
+            if (!(pstm.executeUpdate()>0)){
+                return false;
+            }
         }
-        return list;
+        return true;
     }
 }

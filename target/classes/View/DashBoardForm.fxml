@@ -38,5 +38,10 @@
             <Font name="Consolas" size="18.0" />
          </font>
       </JFXButton>
+      <JFXButton fx:id="placeOderbtn" layoutX="249.0" layoutY="6.0" onAction="#PlaceOrderbtnOnAction" prefHeight="47.0" prefWidth="104.0" style="-fx-background-color: black;" text="Place Order" textFill="#f8ff73">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </JFXButton>
    </children>
 </AnchorPane>

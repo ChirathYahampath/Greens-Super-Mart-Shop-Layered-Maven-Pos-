@@ -177,7 +177,7 @@ public class Itemformcontroller {
     }
 
     private void deleteItem(String code) {
-       // String sql = "DELETE from item WHERE code = ?";
+        // String sql = "DELETE from item WHERE code = ?";
         //String sql = " DELETE FROM item WHERE code = ? ";
         String sql="DELETE FROM item WHERE code =?";
 
@@ -215,7 +215,7 @@ public class Itemformcontroller {
             if (result>0){
                 new Alert(Alert.AlertType.INFORMATION,"Thank You.We have Updated your information! ").show();
                 loadItemTable();
-         //       clearFields();
+                //       clearFields();
             }
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

@@ -4,12 +4,12 @@ import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
 @Setter
+@Getter
 @ToString
-public class CustomerDTO {
-    private String id;
-    private String name;
-    private String address;
-    private double salary;
+public class ItemDto {
+    private String code;
+    private String desc;
+    private double unitPrice;
+    private int qty;
 }

@@ -1,11 +1,12 @@
-package DAO.Custom;
+package dao.custom;
 
-import DAO.CrudDao;
-import entity.OrderDetails;
+import com.mysql.cj.x.protobuf.MysqlxCrud;
+import dao.CrudDao;
+import dto.OrderDto;
+import entity.Orders;
 
 import java.sql.SQLException;
-import java.util.List;
 
-public interface OrderDetailsDAO extends CrudDao<OrderDetails,String> {
-    List<OrderDetails> findOrderDetailByOrderId(String id) throws SQLException, ClassNotFoundException;
+public interface OrderDao extends CrudDao<OrderDto> {
+    OrderDto getLastOrder() throws SQLException, ClassNotFoundException;
 }

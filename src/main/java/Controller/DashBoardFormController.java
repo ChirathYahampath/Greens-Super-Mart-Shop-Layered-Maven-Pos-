@@ -49,7 +49,13 @@ public class DashBoardFormController implements Initializable {
 
     }
 
-    public void PlaceOrderbtnOnAction(ActionEvent actionEvent) {
-
+    public void placeOrderButtonOnAction(ActionEvent actionEvent) {
+        Stage stage = (Stage) pane.getScene().getWindow();
+        try {
+            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/PlaceOrderForm.fxml"))));
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

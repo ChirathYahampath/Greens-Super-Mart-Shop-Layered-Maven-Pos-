@@ -13,6 +13,7 @@ BO\Custom\impl\OrderDetailsBoImpl.class
 Controller\CustomerFormController.class
 Controller\DashBoardFormController.class
 BO\Custom\OrderDeatilsBo.class
+Controller\itemController.class
 entity\Customer.class
 dto\OrderDetailsDTO.class
 DAO\Custom\impl\OrderDaoImpl.class

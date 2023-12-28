@@ -3,5 +3,23 @@ package DAO.Custom;
 import DAO.CrudDao;
 import entity.Item;
 
-public interface ItemDAO extends CrudDao<Item,String> {
+import java.sql.SQLException;
+import java.util.List;
+
+public interface package dao.custom;
+
+        import dto.CustomerDto;
+        import dto.ItemDto;
+
+        import java.sql.SQLException;
+        import java.util.List;
+
+public interface ItemDao {
+    boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException;
+    boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException;
+    boolean deleteItem(ItemDto id) throws SQLException, ClassNotFoundException;
+    List<ItemDto> allItems() throws SQLException, ClassNotFoundException;
+    CustomerDto searchItem(String id);
+}
+ItemDAO extends CrudDao<Item,String> {
 }
