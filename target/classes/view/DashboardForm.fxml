@@ -38,7 +38,7 @@
             <Font name="Consolas" size="18.0" />
          </font>
       </JFXButton>
-      <JFXButton layoutX="245.0" layoutY="6.0" onAction="#placeOrderButtonOnAction" prefHeight="47.0" prefWidth="111.0" style="-fx-background-color: black;" text="Place Order" textFill="#f9fc6f">
+      <JFXButton layoutX="245.0" layoutY="6.0" onAction="#placeOrderButtonOnAction" prefHeight="47.0" prefWidth="121.0" style="-fx-background-color: black;" text="Place Order" textFill="#fdff78">
          <font>
             <Font name="System Bold" size="16.0" />
          </font>
