@@ -58,15 +58,15 @@
             <graphic>
                 <ImageView fitHeight="26.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                     <image>
-                        <Image url="@../img/bck.png" />
+                        <Image url="@../../../../target/classes/img/bck.png" />
                     </image>
                 </ImageView>
             </graphic>
         </JFXButton>
-      <Label fx:id="lblOrderId" layoutX="683.0" layoutY="24.0" prefHeight="26.0" prefWidth="126.0">
-         <font>
-            <Font name="System Bold" size="14.0" />
-         </font>
-      </Label>
+        <Label fx:id="lblOrderId" layoutX="683.0" layoutY="24.0" prefHeight="26.0" prefWidth="126.0">
+            <font>
+                <Font name="System Bold" size="14.0" />
+            </font>
+        </Label>
     </children>
 </AnchorPane>
