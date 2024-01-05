@@ -18,9 +18,9 @@ public class ItemBoImpl implements ItemBo {
     public boolean addItem(ItemDto dto) throws SQLException, ClassNotFoundException {
         return itemDao.saveItem(new Item(
                 dto.getCode(),
-                dto.getDescription(),
-                dto.getUnitPrize(),
-                dto.getQtyOnHand()
+                dto.getDesc(),
+                dto.getUnitPrice(),
+                dto.getQty(),
         ));
     }
 
@@ -28,9 +28,9 @@ public class ItemBoImpl implements ItemBo {
     public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
         return itemDao.updateItem(new Item(
                 dto.getCode(),
-                dto.getdesc(),
-                dto.getUnitPrize(),
-                dto.getQtyOnHand()
+                dto.getDesc(),
+                dto.getUnitPrice(),
+                dto.getQty(),
         ));
     }
 
@@ -50,7 +50,7 @@ public class ItemBoImpl implements ItemBo {
             dtoList.add(new ItemDto(
                     item.getCode(),
                     item.getDescription(),
-                    item.getUnitPrize(),
+                    item.getUnitPrice(),
                     item.getQtyOnHand()
             ));
 

@@ -23,7 +23,7 @@ public class ItemDaoImpl implements ItemDao {
     }
 
     @Override
-    public boolean deleteItem(ItemDto id) throws SQLException, ClassNotFoundException {
+    public boolean deleteItem(String id) throws SQLException, ClassNotFoundException {
         return false;
     }
 

@@ -70,7 +70,7 @@ public class ItemFormController {
         ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
 
         try {
-            List<ItemDto> dtoList  = itemDao.allItems();
+            List<ItemDto> dtoList  = ItemDao.allItems();
             for (ItemDto dto:dtoList) {
                 JFXButton btn = new JFXButton("Delete");
 
