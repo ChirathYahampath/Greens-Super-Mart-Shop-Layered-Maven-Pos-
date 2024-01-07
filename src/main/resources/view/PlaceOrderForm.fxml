@@ -11,21 +11,26 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="593.0" prefWidth="859.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PlaceOrderFormController">
+<AnchorPane prefHeight="593.0" prefWidth="829.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PlaceOrderFormController">
     <children>
-        <JFXComboBox fx:id="cmbCustId" layoutX="65.0" layoutY="46.0" prefHeight="30.0" prefWidth="150.0" />
-        <Label layoutX="65.0" layoutY="28.0" prefHeight="18.0" prefWidth="78.0" text="customer ID" />
-        <JFXComboBox fx:id="cmbCode" layoutX="65.0" layoutY="117.0" prefHeight="30.0" prefWidth="150.0" />
-        <Label layoutX="65.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Item Code" />
-        <JFXTextField fx:id="txtCustName" layoutX="252.0" layoutY="48.0" prefHeight="26.0" prefWidth="178.0" />
-        <JFXTextField fx:id="txtDesc" layoutX="252.0" layoutY="120.0" prefHeight="26.0" prefWidth="178.0" />
-        <JFXTextField fx:id="txtUnitPrice" layoutX="467.0" layoutY="120.0" prefHeight="26.0" prefWidth="143.0" />
-        <JFXTextField fx:id="txtQty" layoutX="644.0" layoutY="120.0" prefHeight="26.0" prefWidth="78.0" />
-        <Label layoutX="252.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Description" />
-        <Label layoutX="252.0" layoutY="28.0" prefHeight="18.0" prefWidth="78.0" text="Name" />
-        <Label layoutX="467.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Unit Price" />
-        <Label layoutX="644.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Buying QTY" />
-        <JFXButton layoutX="709.0" layoutY="179.0" onAction="#addToCartButtonOnAction" prefHeight="30.0" prefWidth="106.0" style="-fx-background-color: #d7ba44;" text="Add to Cart" textFill="WHITE">
+      <ImageView fitHeight="436.0" fitWidth="833.0" layoutX="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/download.jpeg" />
+         </image>
+      </ImageView>
+        <JFXComboBox fx:id="cmbCustId" layoutX="65.0" layoutY="46.0" prefHeight="30.0" prefWidth="150.0" unFocusColor="WHITE" />
+        <Label layoutX="65.0" layoutY="28.0" prefHeight="18.0" prefWidth="78.0" text="customer ID" textFill="WHITE" />
+        <JFXComboBox fx:id="cmbCode" layoutX="65.0" layoutY="117.0" prefHeight="30.0" prefWidth="150.0" unFocusColor="WHITE" />
+        <Label layoutX="65.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Item Code" textFill="WHITE" />
+        <JFXTextField fx:id="txtCustName" layoutX="252.0" layoutY="50.0" prefHeight="26.0" prefWidth="178.0" unFocusColor="WHITE" />
+        <JFXTextField fx:id="txtDesc" layoutX="252.0" layoutY="120.0" prefHeight="26.0" prefWidth="178.0" unFocusColor="WHITE" />
+        <JFXTextField fx:id="txtUnitPrice" layoutX="467.0" layoutY="120.0" prefHeight="26.0" prefWidth="143.0" unFocusColor="#e4e4e4" />
+        <JFXTextField fx:id="txtQty" layoutX="644.0" layoutY="120.0" prefHeight="26.0" prefWidth="78.0" unFocusColor="WHITE" />
+        <Label layoutX="252.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Description" textFill="WHITE" />
+        <Label layoutX="252.0" layoutY="28.0" prefHeight="18.0" prefWidth="78.0" text="Name" textFill="WHITE" />
+        <Label layoutX="467.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Unit Price" textFill="WHITE" />
+        <Label layoutX="644.0" layoutY="99.0" prefHeight="18.0" prefWidth="78.0" text="Buying QTY" textFill="#ebebeb" />
+        <JFXButton layoutX="709.0" layoutY="179.0" onAction="#addToCartButtonOnAction" prefHeight="30.0" prefWidth="106.0" style="-fx-background-color: black;" text="Add to Cart" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
@@ -39,34 +44,30 @@
                 <TreeTableColumn fx:id="colOption" prefWidth="154.4000244140625" text="Option" />
             </columns>
         </JFXTreeTableView>
-        <JFXButton layoutX="709.0" layoutY="535.0" onAction="#placeOrderButtonOnAction" prefHeight="43.0" prefWidth="106.0" style="-fx-background-color: #fa7178;" text="Place Order" textFill="WHITE">
+        <JFXButton layoutX="709.0" layoutY="535.0" onAction="#placeOrderButtonOnAction" prefHeight="43.0" prefWidth="106.0" style="-fx-background-color: black;" text="Place Order" textFill="WHITE">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </JFXButton>
-        <Label layoutX="43.0" layoutY="543.0" prefHeight="26.0" prefWidth="50.0" text="Total : ">
+        <Label layoutX="341.0" layoutY="546.0" prefHeight="26.0" prefWidth="50.0" text="Total : ">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
-        <Label fx:id="lblTotal" layoutX="104.0" layoutY="543.0" prefHeight="26.0" prefWidth="116.0" text="0.00">
+        <Label fx:id="lblTotal" layoutX="409.0" layoutY="546.0" prefHeight="26.0" prefWidth="116.0" text="0.00">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
-        <JFXButton contentDisplay="GRAPHIC_ONLY" layoutX="9.0" layoutY="13.0" onAction="#backButtonOnAction" prefHeight="33.0" prefWidth="36.0">
-            <graphic>
-                <ImageView fitHeight="26.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../../../../target/classes/img/bck.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </JFXButton>
         <Label fx:id="lblOrderId" layoutX="683.0" layoutY="24.0" prefHeight="26.0" prefWidth="126.0">
             <font>
                 <Font name="System Bold" size="14.0" />
             </font>
         </Label>
+      <JFXButton fx:id="bckBtn" layoutX="22.0" layoutY="543.0" onAction="#BackbtnOnAction" prefHeight="29.0" prefWidth="70.0" style="-fx-background-color: black;" text="Back" textFill="#ffe281">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </JFXButton>
     </children>
 </AnchorPane>

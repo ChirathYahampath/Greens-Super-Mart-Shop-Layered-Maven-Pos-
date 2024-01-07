@@ -7,13 +7,9 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
-import dto.CustomerDto;
 import dto.ItemDto;
-import dto.tm.CustomerTm;
 import dto.tm.ItemTm;
 import entity.Item;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,14 +21,11 @@ import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import dao.custom.ItemDao;
-import dao.custom.impl.ItemDaoImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class ItemFormController {
     public BorderPane pane;
@@ -59,21 +52,24 @@ public class ItemFormController {
         loadItems();
 
 
-      //  txtSearch.textProperty().addListener(new ChangeListener<String>() {
-//            @Override
-//            public void changed(ObservableValue<? extends String> observableValue, String s, String newValue) {
-//                tblItem.setPredicate(new Predicate<TreeItem<ItemTm>>() {
-//                    @Override
-//                    public boolean test(TreeItem<ItemTm> treeItem) {
-//                        return treeItem.getValue().getCode().contains(newValue) ||
-//                                treeItem.getValue().getCode().toLowerCase().contains(newValue) ||
-//                                treeItem.getValue().getDesc().contains(newValue) ||
-//                                treeItem.getValue().getDesc().toLowerCase().contains(newValue);
-//                    }
-//                });
-//            }
-//        });
     }
+
+    
+          //  txtSearch.textProperty().addListener(new ChangeListener<String>() {
+    //            @Override
+    //            public void changed(ObservableValue<? extends String> observableValue, String s, String newValue) {
+    //                tblItem.setPredicate(new Predicate<TreeItem<ItemTm>>() {
+    //                    @Override
+    //                    public boolean test(TreeItem<ItemTm> treeItem) {
+    //                        return treeItem.getValue().getCode().contains(newValue) ||
+    //                                treeItem.getValue().getCode().toLowerCase().contains(newValue) ||
+    //                                treeItem.getValue().getDesc().contains(newValue) ||
+    //                                treeItem.getValue().getDesc().toLowerCase().contains(newValue);
+    //                    }
+    //                });
+    //            }
+    //        });
+
 
         private void loadItems () {
             ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
@@ -92,7 +88,7 @@ public class ItemFormController {
                     );
 
                     btn.setOnAction(actionEvent -> {
-//                    (c.getId());
+                    deleteItem(tm.getCode());
                     });
 
                     tmList.add(tm);
@@ -150,6 +146,22 @@ public class ItemFormController {
             }
         }
 
+    private void deleteItem (String id) {
+
+        try {
+            boolean isDeleted = itemBo.deleteItem(id);
+            if (isDeleted){
+                new Alert(Alert.AlertType.INFORMATION,"item Deleted!").show();
+                loadItems();
+            }else{
+                new Alert(Alert.AlertType.ERROR,"Something went wrong!").show();
+            }
+
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void clearFields() {
         tblItem.refresh();
         txtCode.clear();
@@ -157,16 +169,6 @@ public class ItemFormController {
         txtUnitPrice.clear();
         txtQty.clear();
         txtCode.setEditable(true);
-    }
-
-    private void setData(ItemTm newValue) {
-        if (newValue != null) {
-            txtCode.setEditable(false);
-            txtCode.setText(newValue.getCode());
-            txtDescription.setText(newValue.getDesc());
-            txtUnitPrice.setText(String.valueOf(newValue.getUnitPrice()));
-            txtQty.setText(String.valueOf(newValue.getQty()));
-        }
     }
 
 }

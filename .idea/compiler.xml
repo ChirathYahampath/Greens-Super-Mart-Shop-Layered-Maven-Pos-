@@ -7,11 +7,12 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="maven-pos-v2" />
+        <module name="Layerd-maven-pos" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="Example" target="11" />
+      <module name="maven-pos-v2" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
