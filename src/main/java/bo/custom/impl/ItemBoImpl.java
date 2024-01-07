@@ -16,7 +16,7 @@ public class ItemBoImpl implements ItemBo {
 
     @Override
     public boolean addItem(ItemDto dto) throws SQLException, ClassNotFoundException {
-        return itemDao.saveItem(new Item(
+        return itemDao.save(new Item(
                 dto.getCode(),
                 dto.getDesc(),
                 dto.getUnitPrice(),
@@ -26,7 +26,7 @@ public class ItemBoImpl implements ItemBo {
 
     @Override
     public boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException {
-        return itemDao.updateItem(new Item(
+        return itemDao.update(new Item(
                 dto.getCode(),
                 dto.getDesc(),
                 dto.getUnitPrice(),
@@ -37,7 +37,7 @@ public class ItemBoImpl implements ItemBo {
     @Override
     public boolean deleteItem(String code) throws SQLException, ClassNotFoundException {
 
-        return itemDao.deleteItem(code);
+        return itemDao.delete(code);
     }
 
     @Override

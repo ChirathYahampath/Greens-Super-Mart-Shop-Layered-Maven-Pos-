@@ -6,11 +6,11 @@ import entity.Item;
 import java.sql.SQLException;
 
 public interface ItemDao extends CrudDao<Item> {
-    boolean saveItem(Item dto) throws SQLException, ClassNotFoundException;
-
-    boolean updateItem(Item dto) throws SQLException, ClassNotFoundException;
-
-    boolean deleteItem(String id) throws SQLException, ClassNotFoundException;
+//    boolean saveItem(Item dto) throws SQLException, ClassNotFoundException;
+//
+//    boolean updateItem(Item dto) throws SQLException, ClassNotFoundException;
+//
+//    boolean deleteItem(String id) throws SQLException, ClassNotFoundException;
 
 //    boolean saveItem(ItemDto dto) throws SQLException, ClassNotFoundException;
 //    boolean updateItem(ItemDto dto) throws SQLException, ClassNotFoundException;

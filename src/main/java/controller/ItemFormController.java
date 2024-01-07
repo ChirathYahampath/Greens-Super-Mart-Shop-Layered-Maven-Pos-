@@ -7,7 +7,9 @@ import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
 import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
+import dto.CustomerDto;
 import dto.ItemDto;
+import dto.tm.CustomerTm;
 import dto.tm.ItemTm;
 import entity.Item;
 import javafx.beans.value.ChangeListener;
@@ -17,6 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
@@ -27,6 +30,7 @@ import dao.custom.impl.ItemDaoImpl;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -45,7 +49,8 @@ public class ItemFormController {
     public TreeTableColumn colOption;
 
     private ItemBo itemBo = new ItemBoImpl();
-    public void initialize(){
+
+    public void initialize() {
         colCode.setCellValueFactory(new TreeItemPropertyValueFactory<>("code"));
         colDesc.setCellValueFactory(new TreeItemPropertyValueFactory<>("desc"));
         colUnitPrice.setCellValueFactory(new TreeItemPropertyValueFactory<>("unitPrice"));
@@ -53,67 +58,115 @@ public class ItemFormController {
         colOption.setCellValueFactory(new TreeItemPropertyValueFactory<>("btn"));
         loadItems();
 
-        txtSearch.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                tblItem.setPredicate(new Predicate<TreeItem<ItemTm>>() {
-                    @Override
-                    public boolean test(TreeItem<ItemTm> treeItem) {
-                        return treeItem.getValue().getCode().toLowerCase().contains(newValue.toLowerCase()) ||
-                                treeItem.getValue().getDesc().toLowerCase().contains(newValue.toLowerCase());
 
-                    }
-                });
-            }
-        });
+      //  txtSearch.textProperty().addListener(new ChangeListener<String>() {
+//            @Override
+//            public void changed(ObservableValue<? extends String> observableValue, String s, String newValue) {
+//                tblItem.setPredicate(new Predicate<TreeItem<ItemTm>>() {
+//                    @Override
+//                    public boolean test(TreeItem<ItemTm> treeItem) {
+//                        return treeItem.getValue().getCode().contains(newValue) ||
+//                                treeItem.getValue().getCode().toLowerCase().contains(newValue) ||
+//                                treeItem.getValue().getDesc().contains(newValue) ||
+//                                treeItem.getValue().getDesc().toLowerCase().contains(newValue);
+//                    }
+//                });
+//            }
+//        });
     }
 
-    private void loadItems() {
-        ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
+        private void loadItems () {
+            ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
 
-        try {
-            List<ItemDto> dtoList  = itemBo.allItems();
-            for (ItemDto dto:dtoList) {
-                JFXButton btn = new JFXButton("Delete");
+            try {
+                List<ItemDto> dtoList = itemBo.allItems();
+                for (ItemDto dto : dtoList) {
+                    JFXButton btn = new JFXButton("Delete");
 
-                ItemTm tm = new ItemTm(
-                        dto.getCode(),
-                        dto.getDesc(),
-                        dto.getUnitPrice(),
-                        dto.getQty(),
-                        btn
-                );
+                    ItemTm tm = new ItemTm(
+                            dto.getCode(),
+                            dto.getDesc(),
+                            dto.getUnitPrice(),
+                            dto.getQty(),
+                            btn
+                    );
 
-                btn.setOnAction(actionEvent -> {
+                    btn.setOnAction(actionEvent -> {
 //                    (c.getId());
-                });
+                    });
 
-                tmList.add(tm);
+                    tmList.add(tm);
+                }
+                RecursiveTreeItem<ItemTm> treeItem = new RecursiveTreeItem<>(tmList, RecursiveTreeObject::getChildren);
+                tblItem.setRoot(treeItem);
+                tblItem.setShowRoot(false);
+            } catch (SQLException | ClassNotFoundException e) {
+                throw new RuntimeException(e);
             }
-            RecursiveTreeItem<ItemTm> treeItem = new RecursiveTreeItem<>(tmList, RecursiveTreeObject::getChildren);
-            tblItem.setRoot(treeItem);
-            tblItem.setShowRoot(false);
-        } catch (SQLException | ClassNotFoundException e) {
-            throw new RuntimeException(e);
+        }
+
+        public void backButtonOnAction (ActionEvent actionEvent){
+            Stage stage = (Stage) txtCode.getScene().getWindow();
+            try {
+                stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/DashboardForm.fxml"))));
+                stage.centerOnScreen();
+                stage.show();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public void saveButtonOnAction (ActionEvent actionEvent){
+            try {
+                boolean isSaved = itemBo.addItem(new ItemDto(txtCode.getText(), txtDescription.getText(),
+                        Double.parseDouble(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()))
+                );
+                if (isSaved) {
+                    new Alert(Alert.AlertType.INFORMATION,"Item Saved!").show();
+                    loadItems();
+                    clearFields();
+                    tblItem.refresh();
+                }
+            } catch (SQLIntegrityConstraintViolationException ex){
+                new Alert(Alert.AlertType.ERROR,"Duplicate Entry").show();
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+        public void updateButtonOnAction (ActionEvent actionEvent){
+            try {
+                boolean isUpdated = itemBo.updateItem(new ItemDto(txtCode.getText(), txtDescription.getText(),
+                        Double.parseDouble(txtUnitPrice.getText()), Integer.parseInt(txtQty.getText()))
+                );
+                if (isUpdated) {
+                    new Alert(Alert.AlertType.INFORMATION,"Item Updated!").show();
+                    loadItems();
+                    tblItem.refresh();
+                }
+            } catch (SQLException | ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+    private void clearFields() {
+        tblItem.refresh();
+        txtCode.clear();
+        txtDescription.clear();
+        txtUnitPrice.clear();
+        txtQty.clear();
+        txtCode.setEditable(true);
+    }
+
+    private void setData(ItemTm newValue) {
+        if (newValue != null) {
+            txtCode.setEditable(false);
+            txtCode.setText(newValue.getCode());
+            txtDescription.setText(newValue.getDesc());
+            txtUnitPrice.setText(String.valueOf(newValue.getUnitPrice()));
+            txtQty.setText(String.valueOf(newValue.getQty()));
         }
     }
 
-    public void backButtonOnAction(ActionEvent actionEvent) {
-        Stage stage = (Stage) pane.getScene().getWindow();
-        try {
-            stage.setScene(new Scene(FXMLLoader.load(getClass().getResource("/view/DashboardForm.fxml"))));
-            stage.centerOnScreen();
-            stage.show();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void saveButtonOnAction(ActionEvent actionEvent) {
-
-    }
-
-    public void updateButtonOnAction(ActionEvent actionEvent) {
-
-    }
 }
