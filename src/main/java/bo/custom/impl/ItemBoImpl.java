@@ -20,7 +20,7 @@ public class ItemBoImpl implements ItemBo {
                 dto.getCode(),
                 dto.getDesc(),
                 dto.getUnitPrice(),
-                dto.getQty(),
+                dto.getQty()
         ));
     }
 
@@ -30,7 +30,7 @@ public class ItemBoImpl implements ItemBo {
                 dto.getCode(),
                 dto.getDesc(),
                 dto.getUnitPrice(),
-                dto.getQty(),
+                dto.getQty()
         ));
     }
 
@@ -42,7 +42,7 @@ public class ItemBoImpl implements ItemBo {
 
     @Override
     public List<ItemDto> allItems() throws SQLException, ClassNotFoundException {
-        List<Item> entityList = ItemDao.allItems();
+        List<Item> entityList = itemDao.getAll();
         List<ItemDto> dtoList = new ArrayList<>();
 
 

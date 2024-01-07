@@ -1,5 +1,7 @@
 package controller;
 
+import bo.custom.ItemBo;
+import bo.custom.impl.ItemBoImpl;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
 import com.jfoenix.controls.JFXTreeTableView;
@@ -7,6 +9,7 @@ import com.jfoenix.controls.RecursiveTreeItem;
 import com.jfoenix.controls.datamodels.treetable.RecursiveTreeObject;
 import dto.ItemDto;
 import dto.tm.ItemTm;
+import entity.Item;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -41,8 +44,7 @@ public class ItemFormController {
     public TreeTableColumn colQty;
     public TreeTableColumn colOption;
 
-    private ItemDao itemDao = new ItemDaoImpl();
-
+    private ItemBo itemBo = new ItemBoImpl();
     public void initialize(){
         colCode.setCellValueFactory(new TreeItemPropertyValueFactory<>("code"));
         colDesc.setCellValueFactory(new TreeItemPropertyValueFactory<>("desc"));
@@ -70,7 +72,7 @@ public class ItemFormController {
         ObservableList<ItemTm> tmList = FXCollections.observableArrayList();
 
         try {
-            List<ItemDto> dtoList  = ItemDao.allItems();
+            List<ItemDto> dtoList  = itemBo.allItems();
             for (ItemDto dto:dtoList) {
                 JFXButton btn = new JFXButton("Delete");
 

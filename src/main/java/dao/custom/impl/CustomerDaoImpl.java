@@ -32,8 +32,7 @@ public class CustomerDaoImpl implements CustomerDao {
         transaction.commit();
         session.close();
         return true;
-//        String sql = "INSERT INTO customer VALUES(?,?,?,?)";
-//        return CrudUtil.execute(sql,entity.getId(),entity.getName(),entity.getAddress(),entity.getSalary());
+
     }
 
     @Override
