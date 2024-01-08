@@ -20,9 +20,13 @@ import java.time.format.DateTimeFormatter;
 public class DashboardFormController {
     public JFXButton CustomerBtn;
     public AnchorPane root;
+    public JFXButton itemBtn;
+    public JFXButton placeOrderBtn;
 
     public void initialize(){
-
+        itemBtn.setFocusTraversable(false);
+        placeOrderBtn.setFocusTraversable(false);
+        CustomerBtn.setFocusTraversable(false);
     }
 
 
